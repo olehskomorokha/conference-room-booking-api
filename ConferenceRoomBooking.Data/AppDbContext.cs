@@ -9,15 +9,31 @@ public class AppDbContext : DbContext
         base(options)
     {
     }
-    
+
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<AdditionalService> AdditionalServices { get; set; }
     public DbSet<ConferenceRoom> ConferenceRooms { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
+        modelBuilder.Entity<RoomService>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+
+            entity.HasOne(x => x.ConferenceRoom)
+                .WithMany(x => x.RoomServices)
+                .HasForeignKey(x => x.ConferenceRoomId);
+
+            entity.HasOne(x => x.AdditionalService)
+                .WithMany(x => x.RoomServices)
+                .HasForeignKey(x => x.AdditionalServiceId);
+
+            entity.HasIndex(x => new { x.ConferenceRoomId, x.AdditionalServiceId })
+                .IsUnique();
+        });
+
         modelBuilder.Entity<ConferenceRoom>()
             .Property(room => room.BasePricePerHour)
             .HasPrecision(18, 2);
@@ -25,7 +41,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<AdditionalService>()
             .Property(service => service.Price)
             .HasPrecision(18, 2);
-        
+
         modelBuilder.Entity<ConferenceRoom>().HasData(
             new ConferenceRoom
             {

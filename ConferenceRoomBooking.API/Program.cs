@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // register database
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;"));
+    options.UseSqlServer(
+        "Server=localhost\\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 var app = builder.Build();
 

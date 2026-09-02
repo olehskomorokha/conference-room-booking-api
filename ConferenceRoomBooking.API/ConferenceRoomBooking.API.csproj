@@ -19,6 +19,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ConferenceRoomBooking.Data\ConferenceRoomBooking.Data.csproj"/>
+        <ProjectReference Include="..\ConferenceRoomBooking.Service\ConferenceRoomBooking.Service.csproj"/>
     </ItemGroup>
 
 </Project>
