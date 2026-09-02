@@ -7,5 +7,6 @@ public class ConferenceRoom
     public int Capacity { get; set; }
     public decimal BasePricePerHour { get; set; }
 
-    ICollection<AdditionalService>? AdditionalServices { get; set; }
+    ICollection<RoomService>? RoomServices { get; set; }
+    ICollection<Booking>? Bookings { get; set; }
 }

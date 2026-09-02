@@ -5,7 +5,7 @@ namespace ConferenceRoomBooking.Data.Entities;
 public class Booking
 {
     public int Id { get; set; }
-    public int ResourceId { get; set; }
+    public int ConferenceRoomId { get; set; }
     public string UserName { get; set; } = string.Empty;
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }

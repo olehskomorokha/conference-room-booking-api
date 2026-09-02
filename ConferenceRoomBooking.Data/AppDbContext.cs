@@ -39,7 +39,7 @@ public class AppDbContext : DbContext
                 Id = 2,
                 Name = "Зал B",
                 Capacity = 100,
-                BasePricePerHour = 3500m
+                BasePricePerHour = 3500m,
             },
             new ConferenceRoom
             {
