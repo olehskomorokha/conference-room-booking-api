@@ -57,7 +57,7 @@ public class ConferenceRoomService : IConferenceRoomService
         {
             throw new ConferenceRoomException("Failed_to_Update", $"Failed to Find Conference Room with Id = {id}");
         }
-    
+
         if (conferenceRoom.Name != null)
         {
             conferenceRoomToUpdate.Name = conferenceRoom.Name;
@@ -118,5 +118,38 @@ public class ConferenceRoomService : IConferenceRoomService
         }
 
         await _conferenceRoomRepository.DeleteAsync(conferenceRoomToDelete);
+    }
+
+    public async Task DeleteRoomServicesAsync(int roomId, IReadOnlyCollection<int> serviceIds)
+    {
+        var conferenceRoom = await _conferenceRoomRepository.GetByIdAsync(roomId);
+        if (conferenceRoom == null)
+        {
+            throw new ConferenceRoomException("Failed_to_Delete_ConferenceRoom_Service",
+                $"Failed to Find Conference Room with Id = {roomId}");
+        }
+
+        if (conferenceRoom.RoomServices != null)
+        {
+            foreach (var serviceId in serviceIds)
+            {
+                var additionalService = await _additionalServiceRepository.GetByIdAsync(serviceId);
+                if (additionalService == null)
+                {
+                    throw new ConferenceRoomException("Failed_to_Delete_ConferenceRoom_Service",
+                        $"Failed to Find Additional Service with Id = {serviceId}");
+                }
+
+                var roomServiceToDelete = conferenceRoom.RoomServices.FirstOrDefault(x => x.ConferenceRoomId == roomId
+                    && x.AdditionalServiceId == serviceId);
+                
+                if (roomServiceToDelete == null)
+                {
+                    throw new ConferenceRoomException("Failed_to_Delete_Service", "Room Service Not Found");
+                }
+
+                await _roomServiceRepository.DeleteAsync(roomServiceToDelete);
+            }
+        }
     }
 }

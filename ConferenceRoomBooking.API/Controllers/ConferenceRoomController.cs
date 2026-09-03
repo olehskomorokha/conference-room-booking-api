@@ -40,4 +40,11 @@ public class ConferenceRoomController : ControllerBase
         await _conferenceRoomService.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpDelete("/service/{roomId}")]
+    public async Task<IActionResult> DeleteServiceAsync(int roomId, [FromBody] IReadOnlyCollection<int> serviceIds)
+    {
+        await _conferenceRoomService.DeleteRoomServicesAsync(roomId, serviceIds);
+        return NoContent();
+    }
 }

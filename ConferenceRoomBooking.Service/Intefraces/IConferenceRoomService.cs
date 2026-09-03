@@ -8,4 +8,5 @@ public interface IConferenceRoomService
     public Task<int> AddAsync(AddConferenceRoomDto model);
     public Task UpdateAsync(int id, UpdateConferenceRoomDto conferenceRoom);
     public Task DeleteAsync(int id);
+    public Task DeleteRoomServicesAsync(int roomId, IReadOnlyCollection<int> serviceIds);
 }

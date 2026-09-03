@@ -19,7 +19,8 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.UnmappedMemberHandling =
             JsonUnmappedMemberHandling.Disallow;
-    });;
+    });
+;
 
 // register database
 builder.Services.AddDbContext<AppDbContext>(options =>
