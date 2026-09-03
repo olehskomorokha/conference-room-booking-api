@@ -2,7 +2,7 @@ using ConferenceRoomBooking.Service.Intefraces;
 using ConferenceRoomBooking.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConferenceRoomBooking.API;
+namespace ConferenceRoomBooking.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,7 +18,6 @@ public class ConferenceRoomController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync(AddConferenceRoomDto model)
     {
-        await _conferenceRoomService.AddAsync(model);
-        return Ok();
+        return Ok(await _conferenceRoomService.AddAsync(model));
     }
 }

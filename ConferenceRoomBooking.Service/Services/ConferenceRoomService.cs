@@ -11,9 +11,10 @@ public class ConferenceRoomService : IConferenceRoomService
     private readonly IConferenceRoomRepository _conferenceRoomRepository;
     private readonly IRoomServiceRepository _roomServiceRepository;
 
-    public ConferenceRoomService(IConferenceRoomRepository conferenceRoomRepository, IRoomServiceRepository roomServiceRepository)
+    public ConferenceRoomService(IConferenceRoomRepository conferenceRoomRepository,
+        IRoomServiceRepository roomServiceRepository)
     {
-        _conferenceRoomRepository= conferenceRoomRepository;
+        _conferenceRoomRepository = conferenceRoomRepository;
         _roomServiceRepository = roomServiceRepository;
     }
 
@@ -30,18 +31,19 @@ public class ConferenceRoomService : IConferenceRoomService
 
     public async Task<int> AddAsync(AddConferenceRoomDto model)
     {
-        var newConferenceRoom = await _conferenceRoomRepository.AddAsync(ConferenceRoomMapper.ToAddConferenceRoom(model));
-        if (newConferenceRoom == null)
+        if (model == null)
         {
-            throw new ConferenceRoomException("Failed_to_Add", "Failed to Add Conference Room");
+            throw new ConferenceRoomException("Failed_to_Add", "Model is null");
         }
-        
-        if (model.AdditionalServiceIds != null && model.AdditionalServiceIds.Any() && model.AdditionalServiceIds.Count() == 1)
+        var newConferenceRoomId = await _conferenceRoomRepository.AddAsync(ConferenceRoomMapper.ToAddConferenceRoom(model));
+
+        if (model.AdditionalServiceIds != null && model.AdditionalServiceIds.Any())
         {
-            await _roomServiceRepository.AddAsync(RoomServiceMapper.ToAddRoomService(newConferenceRoom, model.AdditionalServiceIds[0]));
+            await _roomServiceRepository.AddRangeAsync(
+                RoomServiceMapper.MapToAddRoomServices(newConferenceRoomId, model.AdditionalServiceIds));
         }
 
-        return 3;
+        return newConferenceRoomId;
     }
 
     public async Task UpdateAsync(int id, UpdateConferenceRoomDto conferenceRoom)

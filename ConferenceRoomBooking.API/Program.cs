@@ -1,4 +1,8 @@
 using ConferenceRoomBooking.Data;
+using ConferenceRoomBooking.Data.Interfaces;
+using ConferenceRoomBooking.Data.Repositories;
+using ConferenceRoomBooking.Service.Intefraces;
+using ConferenceRoomBooking.Service.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,10 +10,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
+builder.Services.AddSwaggerGen();
+// register controller
+builder.Services.AddControllers();
+
 // register database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         "Server=localhost\\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;"));
+
+// configure DI
+builder.Services.AddScoped<IRoomServiceRepository, RoomServiceRepository>();
+
+builder.Services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>();
+builder.Services.AddScoped<IConferenceRoomService, ConferenceRoomService>();
 
 var app = builder.Build();
 
@@ -20,6 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 
 app.Run();

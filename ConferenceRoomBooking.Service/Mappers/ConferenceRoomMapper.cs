@@ -15,6 +15,7 @@ public static class ConferenceRoomMapper
             Name = conferenceRoom.Name
         };
     }
+
     public static ConferenceRoom ToAddConferenceRoom(AddConferenceRoomDto conferenceRoomDto)
     {
         return new ConferenceRoom()
@@ -24,5 +25,4 @@ public static class ConferenceRoomMapper
             BasePricePerHour = conferenceRoomDto.BasePricePerHour
         };
     }
-
 }
