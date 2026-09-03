@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ConferenceRoomBooking.Data;
 using ConferenceRoomBooking.Data.Interfaces;
 using ConferenceRoomBooking.Data.Repositories;
@@ -12,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSwaggerGen();
 // register controller
-builder.Services.AddControllers();
+// and add 400 Bad Request error handling
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.UnmappedMemberHandling =
+            JsonUnmappedMemberHandling.Disallow;
+    });;
 
 // register database
 builder.Services.AddDbContext<AppDbContext>(options =>
