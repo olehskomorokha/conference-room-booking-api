@@ -35,7 +35,9 @@ public class ConferenceRoomService : IConferenceRoomService
         {
             throw new ConferenceRoomException("Failed_to_Add", "Model is null");
         }
-        var newConferenceRoomId = await _conferenceRoomRepository.AddAsync(ConferenceRoomMapper.ToAddConferenceRoom(model));
+
+        var newConferenceRoomId =
+            await _conferenceRoomRepository.AddAsync(ConferenceRoomMapper.ToAddConferenceRoom(model));
 
         if (model.AdditionalServiceIds != null && model.AdditionalServiceIds.Any())
         {

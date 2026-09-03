@@ -20,6 +20,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         "Server=localhost\\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 // configure DI
+
+builder.Services.AddScoped<IAdditionalServiceRepository, AdditionalServiceRepository>();
+builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
+
 builder.Services.AddScoped<IRoomServiceRepository, RoomServiceRepository>();
 
 builder.Services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>();
