@@ -38,6 +38,6 @@ public class ConferenceRoomController : ControllerBase
     public async Task<IActionResult> DeleteAsync(int id)
     {
         await _conferenceRoomService.DeleteAsync(id);
-        return Ok();
+        return NoContent();
     }
 }
