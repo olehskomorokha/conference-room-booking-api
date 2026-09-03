@@ -12,7 +12,9 @@ public static class ConferenceRoomMapper
             Id = conferenceRoom.Id,
             Capacity = conferenceRoom.Capacity,
             BasePricePerHour = conferenceRoom.BasePricePerHour,
-            Name = conferenceRoom.Name
+            Name = conferenceRoom.Name,
+            AdditionalServices = conferenceRoom.RoomServices
+                .Select(x => AdditionalServiceMapper.MapToAdditionalServiceDto(x.AdditionalService)).ToList()
         };
     }
 

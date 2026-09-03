@@ -24,11 +24,12 @@ public class AdditionalServiceService : IAdditionalServiceService
 
     public async Task<AdditionalServiceDto> GetByIdAsync(int id)
     {
-        var  additionalService = await _additionalServiceRepository.GetByIdAsync(id);
+        var additionalService = await _additionalServiceRepository.GetByIdAsync(id);
         if (additionalService == null)
         {
             throw new AdditionalServiceException("Failed_to_Find", "Cant find this model");
         }
+
         return AdditionalServiceMapper.MapToAdditionalServiceDto(additionalService);
     }
 

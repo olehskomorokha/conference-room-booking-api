@@ -1,5 +1,6 @@
 using ConferenceRoomBooking.Data.Entities;
 using ConferenceRoomBooking.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConferenceRoomBooking.Data.Repositories;
 
@@ -14,7 +15,9 @@ public class ConferenceRoomRepository : IConferenceRoomRepository
 
     public async Task<ConferenceRoom> GetByIdAsync(int id)
     {
-        return await _dbContext.ConferenceRooms.FindAsync(id);
+        return await _dbContext.ConferenceRooms.Include(x => x.RoomServices)
+            .ThenInclude(x => x.AdditionalService)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> AddAsync(ConferenceRoom conferenceRoom)

@@ -38,7 +38,7 @@ public class AdditionalServiceController : ControllerBase
     {
         await _additionalServiceService.UpdateAsync(id, model);
     }
-    
+
     [HttpDelete("{id}")]
     public async Task DeleteAsync(int id)
     {
