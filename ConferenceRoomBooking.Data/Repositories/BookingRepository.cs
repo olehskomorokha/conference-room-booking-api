@@ -16,7 +16,17 @@ public class BookingRepository : IBookingRepository
 
     public async Task<List<Booking>> GetAllAsync()
     {
-        return await _dbContext.Bookings.ToListAsync();
+        return await _dbContext.Bookings.Include(x => x.ConferenceRoom).ToListAsync();
+    }
+
+    public Task<bool> HasOverlappingAsync(int conferenceRoomId, DateOnly date, TimeOnly startTime,
+        TimeOnly endTime)
+    {
+        return _dbContext.Bookings.AnyAsync(booking =>
+            booking.ConferenceRoomId == conferenceRoomId &&
+            booking.Date == date &&
+            booking.StartTime < endTime &&
+            booking.EndTime > startTime);
     }
 
     public async Task AddAsync(Booking model)

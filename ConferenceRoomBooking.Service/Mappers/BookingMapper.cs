@@ -20,7 +20,7 @@ public static class BookingMapper
             ConferenceRoom = ConferenceRoomMapper.ToConferenceRoomDto(booking.ConferenceRoom)
         };
     }
-    
+
     public static Booking MapToAddBooking(AddBookingDto bookingDto)
     {
         return new Booking()

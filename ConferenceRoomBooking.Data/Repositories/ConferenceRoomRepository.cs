@@ -39,8 +39,8 @@ public class ConferenceRoomRepository : IConferenceRoomRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<ConferenceRoom>> GetAvailableAsync(int capacity, DateOnly date, DateTime startTime,
-        DateTime endTime)
+    public async Task<List<ConferenceRoom>> GetAvailableAsync(int capacity, DateOnly date, TimeOnly startTime,
+        TimeOnly endTime)
     {
         var conferenceRooms = await _dbContext.ConferenceRooms.Where(cr => cr.Capacity >= capacity)
             .Include(x => x.RoomServices!)

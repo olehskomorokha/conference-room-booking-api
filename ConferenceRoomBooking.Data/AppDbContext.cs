@@ -18,6 +18,22 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Booking>(entity =>
+        {
+            entity.HasOne(x => x.ConferenceRoom)
+                .WithMany(x => x.Bookings)
+                .HasForeignKey(x => x.ConferenceRoomId);
+
+            entity.HasIndex(x => new
+                {
+                    x.ConferenceRoomId,
+                    x.Date,
+                    x.StartTime,
+                    x.EndTime
+                })
+                .IsUnique();
+        });
+
         modelBuilder.Entity<RoomService>(entity =>
         {
             entity.HasKey(x => x.Id);
