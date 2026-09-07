@@ -1,6 +1,3 @@
-using ConferenceRoomBooking.Data.Entities;
-using ConferenceRoomBooking.Data.Enums;
-
 namespace ConferenceRoomBooking.Service.Models.Booking;
 
 public class AddBookingDto
@@ -10,4 +7,5 @@ public class AddBookingDto
     public DateOnly Date { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
+    public List<int>? AdditionalServiceIds { get; set; }
 }

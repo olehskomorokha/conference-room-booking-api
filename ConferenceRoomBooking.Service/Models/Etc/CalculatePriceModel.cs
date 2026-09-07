@@ -2,7 +2,7 @@
 
 public class CalculatePriceModel
 {
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
+    public TimeOnly StartTime { get; set; }
+    public TimeOnly EndTime { get; set; }
     public List<int>? AdditionalServiceIds { get; set; }
 }

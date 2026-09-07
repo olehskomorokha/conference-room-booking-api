@@ -31,7 +31,7 @@ public static class BookingMapper
             StartTime = bookingDto.StartTime,
             EndTime = bookingDto.EndTime,
             CreatedAt = DateTime.Now,
-            Status = BookingStatus.Pending,
+            Status = BookingStatus.Pending
         };
     }
 }

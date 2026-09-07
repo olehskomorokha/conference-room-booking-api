@@ -1,19 +1,21 @@
 using ConferenceRoomBooking.Data.Interfaces;
-using ConferenceRoomBooking.Data.Repositories;
 using ConferenceRoomBooking.Service.Exceptions;
 using ConferenceRoomBooking.Service.Intefraces;
 using ConferenceRoomBooking.Service.Mappers;
 using ConferenceRoomBooking.Service.Models.Booking;
+using ConferenceRoomBooking.Service.Models.Etc;
 
 namespace ConferenceRoomBooking.Service.Services;
 
 public class BookingService : IBookingService
 {
     private readonly IBookingRepository _bookingRepository;
+    private readonly IPaymentService _paymentService;
 
-    public BookingService(IBookingRepository bookingRepository)
+    public BookingService(IBookingRepository bookingRepository, IPaymentService paymentService)
     {
         _bookingRepository = bookingRepository;
+        _paymentService = paymentService;
     }
 
     public async Task<List<BookingDto>> GetAllAsync()
@@ -38,7 +40,16 @@ public class BookingService : IBookingService
         {
             throw new BookingException("Room_unavailable", "The room is already booked for the selected time.");
         }
+        var totalPrice = await _paymentService.CalculatePrice(model.ConferenceRoomId, new CalculatePriceModel()
+        {
+            AdditionalServiceIds =  model.AdditionalServiceIds,
+            StartTime = model.StartTime,
+            EndTime = model.EndTime
+        });
 
-        await _bookingRepository.AddAsync(BookingMapper.MapToAddBooking(model));
+        var bookingToAdd = BookingMapper.MapToAddBooking(model);
+        bookingToAdd.TotalPrice = totalPrice;
+        
+        await _bookingRepository.AddAsync(bookingToAdd);
     }
 }

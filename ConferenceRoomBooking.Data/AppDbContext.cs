@@ -20,6 +20,10 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Booking>(entity =>
         {
+            modelBuilder.Entity<Booking>()
+                .Property(x => x.TotalPrice)
+                .HasPrecision(18, 2);
+            
             entity.HasOne(x => x.ConferenceRoom)
                 .WithMany(x => x.Bookings)
                 .HasForeignKey(x => x.ConferenceRoomId);
