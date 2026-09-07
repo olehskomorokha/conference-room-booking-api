@@ -18,7 +18,7 @@ public class BookingRepository : IBookingRepository
     {
         return await _dbContext.Bookings.ToListAsync();
     }
-    
+
     public async Task AddAsync(Booking model)
     {
         throw new NotImplementedException();

@@ -38,4 +38,18 @@ public class ConferenceRoomRepository : IConferenceRoomRepository
         _dbContext.ConferenceRooms.Remove(conferenceRoom);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task<List<ConferenceRoom>> GetAvailableAsync(int capacity, DateOnly date, DateTime startTime,
+        DateTime endTime)
+    {
+        var conferenceRooms = await _dbContext.ConferenceRooms.Where(cr => cr.Capacity >= capacity)
+            .Include(x => x.RoomServices!)
+            .ThenInclude(x => x.AdditionalService)
+            .Where(cr => !_dbContext.Bookings.Any(booking => booking.ConferenceRoomId == cr.Id &&
+                                                             booking.Date == date &&
+                                                             booking.StartTime < endTime &&
+                                                             booking.EndTime > startTime))
+            .ToListAsync();
+        return conferenceRooms;
+    }
 }

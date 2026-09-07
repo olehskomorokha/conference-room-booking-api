@@ -7,7 +7,7 @@ public class Booking
     public int Id { get; set; }
     public int ConferenceRoomId { get; set; }
     public string UserName { get; set; } = string.Empty;
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public BookingStatus Status { get; set; }

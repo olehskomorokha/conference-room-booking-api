@@ -1,5 +1,6 @@
 using ConferenceRoomBooking.Service.Intefraces;
 using ConferenceRoomBooking.Service.Models;
+using ConferenceRoomBooking.Service.Models.Etc;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConferenceRoomBooking.API.Controllers;
@@ -47,5 +48,11 @@ public class ConferenceRoomController : ControllerBase
     {
         await _conferenceRoomService.DeleteRoomServicesAsync(conferenceRoomId, serviceIds);
         return NoContent();
+    }
+
+    [HttpPost("GetAvailable")]
+    public async Task<IActionResult> GetAvailableAsync(SearchConferenceRoomDto searchConferenceRoomDto)
+    {
+        return Ok(await _conferenceRoomService.GetAvailableAsync(searchConferenceRoomDto));
     }
 }

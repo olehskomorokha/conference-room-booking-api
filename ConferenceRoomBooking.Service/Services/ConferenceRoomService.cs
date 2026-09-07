@@ -3,6 +3,7 @@ using ConferenceRoomBooking.Service.Exceptions;
 using ConferenceRoomBooking.Service.Intefraces;
 using ConferenceRoomBooking.Service.Mappers;
 using ConferenceRoomBooking.Service.Models;
+using ConferenceRoomBooking.Service.Models.Etc;
 
 namespace ConferenceRoomBooking.Service.Services;
 
@@ -142,7 +143,7 @@ public class ConferenceRoomService : IConferenceRoomService
 
                 var roomServiceToDelete = conferenceRoom.RoomServices.FirstOrDefault(x => x.ConferenceRoomId == roomId
                     && x.AdditionalServiceId == serviceId);
-                
+
                 if (roomServiceToDelete == null)
                 {
                     throw new ConferenceRoomException("Failed_to_Delete_Service", "Room Service Not Found");
@@ -151,5 +152,13 @@ public class ConferenceRoomService : IConferenceRoomService
                 await _roomServiceRepository.DeleteAsync(roomServiceToDelete);
             }
         }
+    }
+
+    public async Task<List<ConferenceRoomDto>> GetAvailableAsync(SearchConferenceRoomDto searchConferenceRoomDto)
+    {
+        var availableConferenceRooms = await _conferenceRoomRepository.GetAvailableAsync(
+            searchConferenceRoomDto.Capacity,
+            searchConferenceRoomDto.Date, searchConferenceRoomDto.From, searchConferenceRoomDto.To);
+        return availableConferenceRooms.Select(ConferenceRoomMapper.ToConferenceRoomDto).ToList();
     }
 }

@@ -3,7 +3,7 @@
 public class SearchConferenceRoomDto
 {
     public int Capacity { get; set; }
-    public DateTime DateTime { get; set; }
+    public DateOnly Date { get; set; }
     public DateTime From { get; set; }
     public DateTime To { get; set; }
 }
