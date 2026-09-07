@@ -1,16 +1,13 @@
+using ConferenceRoomBooking.Data.Entities;
 using ConferenceRoomBooking.Data.Enums;
 
-namespace ConferenceRoomBooking.Data.Entities;
+namespace ConferenceRoomBooking.Service.Models.Booking;
 
-public class Booking
+public class AddBookingDto
 {
-    public int Id { get; set; }
     public int ConferenceRoomId { get; set; }
     public string UserName { get; set; } = string.Empty;
     public DateOnly Date { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
-    public BookingStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public ConferenceRoom ConferenceRoom { get; set; } = null!;
 }

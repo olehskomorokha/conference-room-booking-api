@@ -38,6 +38,9 @@ builder.Services.AddScoped<IConferenceRoomRepository, ConferenceRoomRepository>(
 builder.Services.AddScoped<IConferenceRoomService, ConferenceRoomService>();
 
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IBookingService, BookingService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

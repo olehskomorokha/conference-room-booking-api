@@ -9,6 +9,6 @@ public interface IConferenceRoomRepository
     public Task UpdateAsync(ConferenceRoom conferenceRoom);
     public Task DeleteAsync(ConferenceRoom conferenceRoom);
 
-    public Task<List<ConferenceRoom>> GetAvailableAsync(int capacity, DateOnly date, DateTime startDate,
-        DateTime endDate);
+    public Task<List<ConferenceRoom>> GetAvailableAsync(int capacity, DateOnly date, TimeOnly startDate,
+        TimeOnly endDate);
 }

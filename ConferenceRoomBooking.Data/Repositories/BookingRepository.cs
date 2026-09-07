@@ -21,6 +21,7 @@ public class BookingRepository : IBookingRepository
 
     public async Task AddAsync(Booking model)
     {
-        throw new NotImplementedException();
+        await _dbContext.Bookings.AddAsync(model);
+        await _dbContext.SaveChangesAsync();
     }
 }
