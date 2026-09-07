@@ -25,7 +25,6 @@ public class BookingController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] AddBookingDto bookingDto)
     {
-        await _bookingService.AddAsync(bookingDto);
-        return Ok();
+        return Ok(await _bookingService.AddAsync(bookingDto));
     }
 }

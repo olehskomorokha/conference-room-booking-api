@@ -24,7 +24,7 @@ public class BookingService : IBookingService
         return bookings.Select(BookingMapper.MapToBookingDto).ToList();
     }
 
-    public async Task AddAsync(AddBookingDto model)
+    public async Task<decimal> AddAsync(AddBookingDto model)
     {
         if (model == null)
         {
@@ -36,20 +36,23 @@ public class BookingService : IBookingService
             throw new BookingException("Invalid_booking_time", "The end time must be later than the start time.");
         }
 
-        if (await _bookingRepository.HasOverlappingAsync(model.ConferenceRoomId, model.Date, model.StartTime, model.EndTime))
+        if (await _bookingRepository.HasOverlappingAsync(model.ConferenceRoomId, model.Date, model.StartTime,
+                model.EndTime))
         {
             throw new BookingException("Room_unavailable", "The room is already booked for the selected time.");
         }
+
         var totalPrice = await _paymentService.CalculatePrice(model.ConferenceRoomId, new CalculatePriceModel()
         {
-            AdditionalServiceIds =  model.AdditionalServiceIds,
+            AdditionalServiceIds = model.AdditionalServiceIds,
             StartTime = model.StartTime,
             EndTime = model.EndTime
         });
 
         var bookingToAdd = BookingMapper.MapToAddBooking(model);
         bookingToAdd.TotalPrice = totalPrice;
-        
+
         await _bookingRepository.AddAsync(bookingToAdd);
+        return totalPrice;
     }
 }
