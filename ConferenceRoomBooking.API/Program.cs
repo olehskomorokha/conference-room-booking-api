@@ -28,7 +28,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         "Server=localhost\\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 // configure DI
-
 builder.Services.AddScoped<IAdditionalServiceRepository, AdditionalServiceRepository>();
 builder.Services.AddScoped<IAdditionalServiceService, AdditionalServiceService>();
 
@@ -41,11 +40,15 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+
+builder.Services.AddScoped<IReportService, ReportService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // configure swagger
     app.UseSwagger();
     app.UseSwaggerUI();
 }

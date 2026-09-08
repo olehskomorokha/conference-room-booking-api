@@ -30,12 +30,12 @@ public class BookingService : IBookingService
         {
             throw new BookingException("Failed_to_Add", "Model is null");
         }
-        
+
         if (model.Date < DateOnly.FromDateTime(DateTime.Today))
         {
             throw new BookingException("Invalid_date", "The booking date is in the past");
         }
-        
+
         var totalPrice = await _paymentService.CalculatePrice(model.ConferenceRoomId, new CalculatePriceModel()
         {
             AdditionalServiceIds = model.AdditionalServiceIds,
@@ -49,8 +49,9 @@ public class BookingService : IBookingService
         var isCreated = await _bookingRepository.AddAsync(bookingToAdd);
         if (!isCreated)
         {
-            throw new BookingException(  "Room_unavailable", "The room is already booked for the selected time.");
+            throw new BookingException("Room_unavailable", "The room is already booked for the selected time.");
         }
+
         return totalPrice;
     }
 }

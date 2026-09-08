@@ -15,7 +15,7 @@ public class PaymentController : ControllerBase
         _paymentService = paymentService;
     }
 
-    [HttpPost("Сalculate-price")]
+    [HttpPost("Calculate-price")]
     public async Task<IActionResult> GetPrice([FromQuery] int conferenceRoomId, [FromBody] CalculatePriceModel model)
     {
         return Ok(await _paymentService.CalculatePrice(conferenceRoomId, model));

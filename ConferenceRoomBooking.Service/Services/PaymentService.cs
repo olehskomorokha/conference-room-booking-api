@@ -77,10 +77,12 @@ public class PaymentService : IPaymentService
         foreach (var period in tariffPeriods)
         {
             var overlapStart = startTime > period.StartTime
-                ? startTime : period.StartTime;
+                ? startTime
+                : period.StartTime;
 
             var overlapEnd = endTime < period.EndTime
-                ? endTime : period.EndTime;
+                ? endTime
+                : period.EndTime;
 
             if (overlapStart >= overlapEnd)
             {

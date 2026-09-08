@@ -165,6 +165,7 @@ public class ConferenceRoomService : IConferenceRoomService
         {
             throw new ConferenceRoomException("Failed_to_Get", "Capacity is less than 0");
         }
+
         var availableConferenceRooms = await _conferenceRoomRepository.GetAvailableAsync(
             searchConferenceRoomDto.Capacity,
             searchConferenceRoomDto.Date, searchConferenceRoomDto.From, searchConferenceRoomDto.To);

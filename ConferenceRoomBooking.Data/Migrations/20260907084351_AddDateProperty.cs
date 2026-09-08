@@ -11,25 +11,31 @@ namespace ConferenceRoomBooking.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<DateOnly>(
+                name: "Date",
+                table: "Bookings",
+                type: "date",
+                nullable: true);
+
+            migrationBuilder.Sql(
+                "UPDATE [Bookings] SET [Date] = CAST([StartTime] AS date) WHERE [Date] IS NULL;");
+
             migrationBuilder.AlterColumn<DateOnly>(
                 name: "Date",
                 table: "Bookings",
                 type: "date",
                 nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "datetime2");
+                oldClrType: typeof(DateOnly),
+                oldType: "date",
+                oldNullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<DateTime>(
+            migrationBuilder.DropColumn(
                 name: "Date",
-                table: "Bookings",
-                type: "datetime2",
-                nullable: false,
-                oldClrType: typeof(DateOnly),
-                oldType: "date");
+                table: "Bookings");
         }
     }
 }

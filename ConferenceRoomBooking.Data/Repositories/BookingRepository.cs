@@ -22,6 +22,16 @@ public class BookingRepository : IBookingRepository
             .ToListAsync();
     }
 
+    public async Task<List<ConferenceRoom>> GetRoomsWithBookingsAsync(DateOnly from, DateOnly to)
+    {
+        return await _dbContext.ConferenceRooms
+            .AsNoTracking()
+            .Include(room => room.Bookings!.Where(booking =>
+                booking.Date >= from && booking.Date <= to &&
+                booking.Status != BookingStatus.Cancelled))
+            .ToListAsync();
+    }
+
     public async Task<bool> AddAsync(Booking model)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
