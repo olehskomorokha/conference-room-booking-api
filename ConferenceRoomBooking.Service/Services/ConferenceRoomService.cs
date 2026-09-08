@@ -156,6 +156,15 @@ public class ConferenceRoomService : IConferenceRoomService
 
     public async Task<List<ConferenceRoomDto>> GetAvailableAsync(SearchConferenceRoomDto searchConferenceRoomDto)
     {
+        if (searchConferenceRoomDto == null)
+        {
+            throw new ConferenceRoomException("Failed_to_Get", "Model is null");
+        }
+
+        if (searchConferenceRoomDto.Capacity < 0)
+        {
+            throw new ConferenceRoomException("Failed_to_Get", "Capacity is less than 0");
+        }
         var availableConferenceRooms = await _conferenceRoomRepository.GetAvailableAsync(
             searchConferenceRoomDto.Capacity,
             searchConferenceRoomDto.Date, searchConferenceRoomDto.From, searchConferenceRoomDto.To);

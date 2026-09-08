@@ -30,18 +30,12 @@ public class BookingService : IBookingService
         {
             throw new BookingException("Failed_to_Add", "Model is null");
         }
-
-        if (model.StartTime >= model.EndTime)
+        
+        if (model.Date < DateOnly.FromDateTime(DateTime.Today))
         {
-            throw new BookingException("Invalid_booking_time", "The end time must be later than the start time.");
+            throw new BookingException("Invalid_date", "The booking date is in the past");
         }
-
-        if (await _bookingRepository.HasOverlappingAsync(model.ConferenceRoomId, model.Date, model.StartTime,
-                model.EndTime))
-        {
-            throw new BookingException("Room_unavailable", "The room is already booked for the selected time.");
-        }
-
+        
         var totalPrice = await _paymentService.CalculatePrice(model.ConferenceRoomId, new CalculatePriceModel()
         {
             AdditionalServiceIds = model.AdditionalServiceIds,
@@ -52,7 +46,11 @@ public class BookingService : IBookingService
         var bookingToAdd = BookingMapper.MapToAddBooking(model);
         bookingToAdd.TotalPrice = totalPrice;
 
-        await _bookingRepository.AddAsync(bookingToAdd);
+        var isCreated = await _bookingRepository.AddAsync(bookingToAdd);
+        if (!isCreated)
+        {
+            throw new BookingException(  "Room_unavailable", "The room is already booked for the selected time.");
+        }
         return totalPrice;
     }
 }

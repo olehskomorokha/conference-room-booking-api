@@ -1,4 +1,5 @@
-﻿using ConferenceRoomBooking.Data.Entities;
+﻿using System.Data;
+using ConferenceRoomBooking.Data.Entities;
 using ConferenceRoomBooking.Data.Enums;
 using ConferenceRoomBooking.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -16,22 +17,32 @@ public class BookingRepository : IBookingRepository
 
     public async Task<List<Booking>> GetAllAsync()
     {
-        return await _dbContext.Bookings.Include(x => x.ConferenceRoom).ToListAsync();
+        return await _dbContext.Bookings.Include(x => x.ConferenceRoom)
+            .ThenInclude(room => room.RoomServices!)
+            .ThenInclude(roomService => roomService.AdditionalService)
+            .ToListAsync();
     }
 
-    public Task<bool> HasOverlappingAsync(int conferenceRoomId, DateOnly date, TimeOnly startTime,
-        TimeOnly endTime)
+    public async Task<bool> AddAsync(Booking model)
     {
-        return _dbContext.Bookings.AnyAsync(booking =>
-            booking.ConferenceRoomId == conferenceRoomId &&
-            booking.Date == date &&
-            booking.StartTime < endTime &&
-            booking.EndTime > startTime);
-    }
-
-    public async Task AddAsync(Booking model)
-    {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+        
+        var hasConflict = await _dbContext.Bookings.AnyAsync(booking =>
+            booking.ConferenceRoomId == model.ConferenceRoomId &&
+            booking.Date == model.Date &&
+            booking.StartTime < model.EndTime &&
+            booking.EndTime > model.StartTime);
+        
+        if (hasConflict)
+        {
+            await transaction.RollbackAsync();
+            return false;
+        }
+        
         await _dbContext.Bookings.AddAsync(model);
         await _dbContext.SaveChangesAsync();
+        
+        await transaction.CommitAsync();
+        return true;
     }
 }

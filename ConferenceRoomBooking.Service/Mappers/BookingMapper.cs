@@ -17,7 +17,8 @@ public static class BookingMapper
             EndTime = booking.EndTime,
             Date = booking.Date,
             Status = booking.Status,
-            ConferenceRoom = ConferenceRoomMapper.ToConferenceRoomDto(booking.ConferenceRoom)
+            TotalPrice = booking.TotalPrice,
+            ConferenceRoom = ConferenceRoomMapper.ToConferenceRoomDto(booking.ConferenceRoom),
         };
     }
 
@@ -30,7 +31,7 @@ public static class BookingMapper
             Date = bookingDto.Date,
             StartTime = bookingDto.StartTime,
             EndTime = bookingDto.EndTime,
-            CreatedAt = DateTime.Now,
+            CreatedAt = DateTime.UtcNow,
             Status = BookingStatus.Pending
         };
     }

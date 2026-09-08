@@ -24,7 +24,7 @@ public class PaymentService : IPaymentService
             model.EndTime,
             conferenceRoom.BasePricePerHour);
 
-        if (model.AdditionalServiceIds != null)
+        if (model.AdditionalServiceIds?.Count > 0)
         {
             foreach (var service in conferenceRoom.AdditionalServices)
             {
@@ -77,12 +77,10 @@ public class PaymentService : IPaymentService
         foreach (var period in tariffPeriods)
         {
             var overlapStart = startTime > period.StartTime
-                ? startTime
-                : period.StartTime;
+                ? startTime : period.StartTime;
 
             var overlapEnd = endTime < period.EndTime
-                ? endTime
-                : period.EndTime;
+                ? endTime : period.EndTime;
 
             if (overlapStart >= overlapEnd)
             {
@@ -92,18 +90,15 @@ public class PaymentService : IPaymentService
             var duration = overlapEnd - overlapStart;
             var hours = (decimal)duration.TotalMinutes / 60;
 
-            totalPrice +=
-                hours *
-                basePricePerHour *
-                period.Multiplier;
+            totalPrice += hours *
+                          basePricePerHour *
+                          period.Multiplier;
         }
 
         return totalPrice;
     }
 
-    private static void ValidateTime(
-        TimeOnly startTime,
-        TimeOnly endTime)
+    private static void ValidateTime(TimeOnly startTime, TimeOnly endTime)
     {
         if (startTime >= endTime)
         {
@@ -121,8 +116,5 @@ public class PaymentService : IPaymentService
         }
     }
 
-    private record TariffPeriod(
-        TimeOnly StartTime,
-        TimeOnly EndTime,
-        decimal Multiplier);
+    private record TariffPeriod(TimeOnly StartTime, TimeOnly EndTime, decimal Multiplier);
 }

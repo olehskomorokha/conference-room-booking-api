@@ -11,5 +11,6 @@ public class BookingDto
     public TimeOnly EndTime { get; set; }
     public BookingStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public decimal TotalPrice { get; set; }
     public ConferenceRoomDto ConferenceRoom { get; set; } = null!;
 }
