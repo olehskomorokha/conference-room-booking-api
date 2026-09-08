@@ -35,22 +35,22 @@ public class BookingRepository : IBookingRepository
     public async Task<bool> AddAsync(Booking model)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
-        
+
         var hasConflict = await _dbContext.Bookings.AnyAsync(booking =>
             booking.ConferenceRoomId == model.ConferenceRoomId &&
             booking.Date == model.Date &&
             booking.StartTime < model.EndTime &&
             booking.EndTime > model.StartTime);
-        
+
         if (hasConflict)
         {
             await transaction.RollbackAsync();
             return false;
         }
-        
+
         await _dbContext.Bookings.AddAsync(model);
         await _dbContext.SaveChangesAsync();
-        
+
         await transaction.CommitAsync();
         return true;
     }
