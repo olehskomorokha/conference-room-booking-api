@@ -1,5 +1,6 @@
 namespace ConferenceRoomBooking.Service.Models.Report;
 
+/// <summary>Revenue report for a selected period.</summary>
 public class RevenueReportDto
 {
     public DateOnly From { get; init; }
