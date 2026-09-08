@@ -17,9 +17,8 @@ public class BookingRepository : IBookingRepository
 
     public async Task<List<Booking>> GetAllAsync()
     {
-        return await _dbContext.Bookings.Include(x => x.ConferenceRoom)
-            .ThenInclude(room => room.RoomServices!)
-            .ThenInclude(roomService => roomService.AdditionalService)
+        return await _dbContext.Bookings
+            .Include(booking => booking.ConferenceRoom)
             .ToListAsync();
     }
 

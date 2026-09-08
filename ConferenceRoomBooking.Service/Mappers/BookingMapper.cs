@@ -1,5 +1,6 @@
 using ConferenceRoomBooking.Data.Entities;
 using ConferenceRoomBooking.Data.Enums;
+using ConferenceRoomBooking.Service.Models;
 using ConferenceRoomBooking.Service.Models.Booking;
 
 namespace ConferenceRoomBooking.Service.Mappers;
@@ -18,7 +19,13 @@ public static class BookingMapper
             Date = booking.Date,
             Status = booking.Status,
             TotalPrice = booking.TotalPrice,
-            ConferenceRoom = ConferenceRoomMapper.ToConferenceRoomDto(booking.ConferenceRoom),
+            ConferenceRoom = new ConferenceRoomDto
+            {
+                Id = booking.ConferenceRoom.Id,
+                Name = booking.ConferenceRoom.Name,
+                Capacity = booking.ConferenceRoom.Capacity,
+                BasePricePerHour = booking.ConferenceRoom.BasePricePerHour
+            },
         };
     }
 
