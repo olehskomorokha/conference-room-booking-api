@@ -46,16 +46,15 @@ booking.EndTime > model.StartTime
 ### 1. Клонувати репозиторій
 
 ```powershell
-git clone <repository-url>
-Set-Location conference-room-booking-api
+git clone git@github.com:olehskomorokha/conference-room-booking-api.git
 ```
 
 ### 2. Налаштувати підключення до SQL Server
 
-Поточне підключення вказано в `ConferenceRoomBooking.API/Program.cs`:
+Вказати ConnectionString в `ConferenceRoomBooking.API/Program.cs`:
 
 ```text
-Server=localhost\SQLEXPRESS;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;
+Server=YourSqlServer;Database=conferenceRoomBookingDb;Trusted_Connection=True;TrustServerCertificate=True;
 ```
 
 ### 3. Запустити застосунок
@@ -69,12 +68,14 @@ dotnet run --project ConferenceRoomBooking.API --launch-profile https
 - `https://localhost:7109`
 - `http://localhost:5297`
 
-У режимі `Development` перейдіть у браузері за адресою:
+Також за адресою 
 
 ```text
 https://localhost:7109/swagger
 
 ```
+
+доступний Swagger з документацією
 
 ## Приклади звітів
 
@@ -83,3 +84,81 @@ GET /api/reports/Room-utilization?from=2026-09-01&to=2026-09-30
 GET /api/reports/Revenue?from=2026-09-01&to=2026-09-30
 GET /api/reports/Room-profitability?from=2026-09-01&to=2026-09-30
 ```
+
+## Приклади запитів API
+
+У прикладах використовується адреса `https://localhost:7109`.
+
+### 1. Додавання конференц-залу
+
+```http
+POST https://localhost:7109/api/ConferenceRoom
+Content-Type: application/json
+
+{
+  "name": "Зал А",
+  "capacity": 50,
+  "basePricePerHour": 2000,
+  "additionalServiceIds": [1, 2]
+}
+```
+
+Успішна відповідь: `200 OK` з унікальним ID створеного залу, наприклад `4`.
+
+### 2. Редагування інформації про зал
+
+```http
+PUT https://localhost:7109/api/ConferenceRoom/4
+Content-Type: application/json
+
+{
+  "basePricePerHour": 2500,
+  "additionalServicesIds": [1, 2, 3]
+}
+```
+
+Успішна відповідь: `200 OK`.
+
+> Зверніть увагу: у DTO для оновлення поле називається `additionalServicesIds`.
+
+### 3. Видалення конференц-залу
+
+```http
+DELETE https://localhost:7109/api/ConferenceRoom/4
+```
+
+Успішна відповідь: `204 No Content`.
+
+### 4. Пошук доступних залів
+
+```http
+POST https://localhost:7109/api/ConferenceRoom/GetAvailable
+Content-Type: application/json
+
+{
+  "capacity": 50,
+  "date": "2026-10-01",
+  "from": "10:00:00",
+  "to": "14:00:00"
+}
+```
+
+Успішна відповідь: `200 OK` зі списком кімнат, які мають місткість щонайменше 50 осіб і вільні в зазначений інтервал.
+
+### 5. Бронювання залу
+
+```http
+POST https://localhost:7109/api/Booking
+Content-Type: application/json
+
+{
+  "conferenceRoomId": 1,
+  "userName": "Ірина Петренко",
+  "date": "2026-10-01",
+  "startTime": "10:00:00",
+  "endTime": "14:00:00",
+  "additionalServiceIds": [1, 2]
+}
+```
+
+Успішна відповідь: `200 OK` із загальною вартістю бронювання. Якщо час перетинається з існуючим бронюванням цієї кімнати, API поверне помилку з кодом `Room_unavailable`.
